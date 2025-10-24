@@ -32,7 +32,7 @@ fundb=note*2.pow(tone/56).round(0.00000001);
 
 		copper=(copper+(360/bank)).wrap(0,360).round(0.00000001);
 		golden=(golden+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-		//silver=(golden+(360-(360/(1+2.srqrt)))).wrap(0,360).round(0.00000001);
+		//silver=(golden+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
 	freqa=funda*m;
 	freqb=fundb*m;
 	//freqc=(fundb*m)/2;

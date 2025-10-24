@@ -1,20 +1,24 @@
 ////////////////////////////////////speaker setup///other
-
-	~a = VBAPSpeakerArray.new(3, [[45, 35.264390.neg], [135.neg, 35.264390.neg], [45.neg, 35.264390], [135, 35.264390]]);
-	 ~b = Buffer.loadCollection(s, ~a.getSetsAndMatrices);
 ////////
 )
 (
 Server.default = s = Server.local;
 ////server setup
+s.options.numOutputBusChannels=4;
+
 (
 s.waitForBoot{
+	Buffer.freeAll;
 	(
+	~a = VBAPSpeakerArray.new(3, [[45, 35.264390.neg], [135.neg, 35.264390.neg], [45.neg, 35.264390], [135, 35.264390]]);
+	 ~b = Buffer.loadCollection(s, ~a.getSetsAndMatrices);
+)
+
 (
 SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
-	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,freqc;
+	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,freqc,sphere;
 	var golden=0,silver=0,sig1,sig2,note=28,bank=4,sig,copper=0,out1,out2;
 
 
@@ -34,7 +38,7 @@ fundb=note*2.pow(tone/56).round(0.00000001);
 
 		copper=(copper+(360/bank)).wrap(0,360).round(0.00000001);
 		golden=(golden+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-		//silver=(golden+(360-(360/(1+2.srqrt)))).wrap(0,360).round(0.00000001);
+		silver=(golden+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
 	freqa=funda*m;
 	freqb=fundb*m;
 	//freqc=(fundb*m)/2;
@@ -47,15 +51,15 @@ fundb=note*2.pow(tone/56).round(0.00000001);
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
 
-out1=LPF.ar(sig1,low);
-out2=LPF.ar(sig2,low);
-					//sig=sig1+sig2;
+					out1=VBAP.ar(4,LPF.ar(sig1,low),~b.bufnum,silver.linlin(0,360,180.neg,180),silver.linlin(0,360,90.neg,90));
+					out2=VBAP.ar(4,LPF.ar(sig2,low),~b.bufnum,silver.linlin(0,360,180.neg,180),silver.linlin(0,360,90.neg,90));
 
-Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));
-Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
-//Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
+
+					Out.ar(0,LeakDC.ar(out1),gain);Out.ar(0,LeakDC.ar(out2),gain);
+
 			}
 }).add;);
+
 	~synth=Synth.new(\drone,[\gain,1,\tone,48,\low,256,\high,0,\mix,0,\room,0]).register;//s.record
 
 	(
@@ -117,7 +121,6 @@ MIDIdef.cc(\midi6,{ |val, num, chan, src|
 },20);
 	);
 
-)
 )
 
 }
