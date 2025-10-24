@@ -35,11 +35,11 @@ fundb=note*2.pow(tone/56).round(0.00000001);
 		//silver=(golden+(360-(360/(1+2.srqrt)))).wrap(0,360).round(0.00000001);
 	freqa=funda*m;
 	freqb=fundb*m;
-	freqc=fundb*m;
+	//freqc=(fundb*m)/2;
 
 					sig1=(LPF.ar(Pulse.ar(freqa*4,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqa,ph,m.reciprocal));
 					sig2=(LPF.ar(Pulse.ar(freqb*4,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqb,ph,m.reciprocal));
-					//sig1=LeakDC.ar((LPF.ar(Pulse.ar(freqc.reciprocal*4,width:0.5,mul:m).abs,low/4)*SinOsc.ar(freqc.reciprocal,ph,m)));
+					//sig1=(LPF.ar(Pulse.ar(freqc*4,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqc,ph,m.reciprocal));
 					//sig2=(LPF.ar(Pulse.ar(freqb*4,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqb+sig1,ph,m.reciprocal));
 
 sig1=FreeVerb.ar(sig1,mix,room,high);
