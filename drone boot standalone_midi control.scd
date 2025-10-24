@@ -18,7 +18,7 @@ SynthDef.new(\drone,{
 
 (24).do{
 
-	note=28*2.pow(tone/56)
+	note=28*2.pow(tone/56);
 
 funda=note*2.pow(6/12);
 fundb=note*2.pow(6.neg/12);
@@ -52,7 +52,7 @@ Out.ar(0,Pan2.ar(sig2,linex,0.1));Out.ar(0,Pan2.ar(sig2,liney,0.1));
 			}
 }).add;);
 
-	~synth=Synth.new(\drone,[\gain,1,\tone,28,\low,496,\high,16256,\mix,0,\room,0]).register;s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,28,\low,496,\high,0,\mix,0,\room,0]).register;//s.record
 
 	(
 MIDIClient.init;
@@ -61,56 +61,56 @@ MIDIIn.connectAll;
 MIDIdef.cc(\midi1,{ |val, num, chan, src|
 		var l;
 	//[val, num, chan, src].postln;
-	l=val.linlin(0,127,28,16256);
+		l=val.linlin(0,127,16256,28).round(0.0001);
 		l.postln;
 		if(~synth.isPlaying,{~synth.set(\low,l)});
-},24);
+},25);
 	);
 	(
 MIDIdef.cc(\midi2,{ |val, num, chan, src|
 		 var h;
 	//[val, num, chan, src].postln;
-	h=val.linlin(0,127,16256,28);
+	h=val.linlin(0,127,0,1).round(0.0001);
 		h.postln;
 		if(~synth.isPlaying,{~synth.set(\high,h)});
-},23);
+},24);
 	);
 		(
 MIDIdef.cc(\midi3,{ |val, num, chan, src|
 		var g;
 	//[val, num, chan, src].postln;
-	g=val.linlin(0,127,0.00001,1);
+	g=val.linlin(0,127,0.00001,1).round(0.0001);
 		g.postln;
 		if(~synth.isPlaying,{~synth.set(\gain,g)});
-},25);
+},23);
 	);
 
 	(
 MIDIdef.cc(\midi4,{ |val, num, chan, src|
 		var m;
 	//[val, num, chan, src].postln;
-	m=val.linlin(0,127,0,1);
+	m=val.linlin(0,127,0,1).round(0.0001);
 		m.postln;
 		if(~synth.isPlaying,{~synth.set(\mix,m)});
-},21);
+},22);
 	);
 		(
 MIDIdef.cc(\midi5,{ |val, num, chan, src|
 		var r;
 	//[val, num, chan, src].postln;
-	r=val.linlin(0,127,0,1);
+	r=val.linlin(0,127,0,1).round(0.0001);
 		r.postln;
 		if(~synth.isPlaying,{~synth.set(\room,r)});
-},20);
+},21);
 	);
 					(
 MIDIdef.cc(\midi6,{ |val, num, chan, src|
 		var t;
 	//[val, num, chan, src].postln;
-		t=val.linlin(0,127,0,7168).round(1);
+		t=val.linlin(0,127,0,7168).round(1).asInteger;
 		t.postln;
 		if(~synth.isPlaying,{~synth.set(\tone,t)});
-},22);
+},20);
 	);
 
 )
