@@ -1,10 +1,11 @@
 ///perfect numbers  6, 28, 496, 8128
 //2.pow((992*4)/992)
+//2.pow((56*4)/56)
+//2.pow(6/12)=2.sqrt
 //(56*4)*(496/28)
-///am max freq 28*16*10*4
+//am max freq
+//28*16*pi*5*3
 ///interval for sawtooth is either transcedebtal bumber like golden or silver rario or pi,or a lamdoma table interval
-(
-)
 (
 Server.default = s = Server.local;
 ////server setup
@@ -15,7 +16,7 @@ SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 			var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12);
-	var golden=0,silver=0,sig1,sig2,note=28,bank=4,sig,copper=0,out1,out2,fm1,fm2;
+	var golden=0,silver=0,sig1,sig2,note=28,bank=5,sig,copper=0,out1,out2,fm1,fm2;
 
 bank.do{
 
@@ -56,7 +57,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,5629,\high,0,\mix,0.5,\room,0.2]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256,\high,0,\mix,0.5,\room,0.2]).register;//s.record
 
 	(
 MIDIClient.init;
@@ -65,7 +66,7 @@ MIDIIn.connectAll;
 MIDIdef.cc(\midi1,{ |val, num, chan, src|
 		var l;
 	//[val, num, chan, src].postln;
-		l=val.linlin(0,127,5629,56).round(0.00000001);
+		l=val.linlin(0,127,16256,56).round(0.00000001);
 		l.postln;
 		if(~synth.isPlaying,{~synth.set(\low,l)});
 },25);
@@ -121,5 +122,4 @@ MIDIdef.cc(\midi6,{ |val, num, chan, src|
 )
 
 }
-)
 )

@@ -18,13 +18,13 @@ s.waitForBoot{
 SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
-	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=1.6180339887499;
-	var golden=0,silver=0,sig1,sig2,note=28,bank=4,sig,copper=0,out1,out2,fm1,fm2;
+	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=3/2;
+	var golden=0,silver=0,sig1,sig2,note=28,bank=5,sig,copper=0,out1,out2,fm1,fm2;
 
 
 bank.do{
 
-funda=note*2.pow(tone/12).round(0.00000001);
+funda=note*2.pow(tone/56).round(0.00000001);
 fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
 
 	n=n+1;
@@ -61,7 +61,7 @@ sig2=FreeVerb.ar(sig2,mix,room,high);
 			}
 }).add;);
 
-	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,5629/32,\high,0,\mix,0,\room,0]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,16256,\high,0,\mix,0,\room,0]).register;//s.record
 
 	(
 MIDIClient.init;
@@ -70,7 +70,7 @@ MIDIIn.connectAll;
 MIDIdef.cc(\midi1,{ |val, num, chan, src|
 		var l;
 	//[val, num, chan, src].postln;
-		l=val.linlin(0,127,5629,28).round(0.00000001);
+		l=val.linlin(0,127,16256,56).round(0.00000001);
 		l.postln;
 		if(~synth.isPlaying,{~synth.set(\low,l)});
 },25);
