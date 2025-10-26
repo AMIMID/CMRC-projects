@@ -36,9 +36,12 @@ fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
 	linex=exp(Complex(0,1)*copper.degrad).real.round(0.00000001);
 	liney=exp(Complex(0,1)*copper.degrad).imag.neg.round(0.00000001);
 
-		copper=(copper+(360/bank)).wrap(0,360).round(0.00000001);
+			copper=(copper+(360/bank)).round(0.00000001);
 		golden=(golden+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
+				if(golden>180,{golden=180-golden},{golden=golden});
 		silver=(silver+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
+				if(silver>180,{silver=180-silver},{silver=silver});
+
 	freqa=funda*m;
 	freqb=fundb*m;
 	fm1=LFNoise1.ar(freqa.reciprocal,freqa);
@@ -52,16 +55,14 @@ fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
 
-					out1=VBAP.ar(4,LPF.ar(sig1,low),~b.bufnum,silver.linlin(0,360,180.neg,180),silver.linlin(0,360,90.neg,90));
-					out2=VBAP.ar(4,LPF.ar(sig2,low),~b.bufnum,silver.linlin(0,360,180.neg,180),silver.linlin(0,360,90.neg,90));
-
+					out1=VBAP.ar(4,LPF.ar(sig1,low),~b.bufnum,silver,silver.wrap(90.neg,90));
+					out2=VBAP.ar(4,LPF.ar(sig2,low),~b.bufnum,silver,silver.wrap(90.neg,90));
 
 					Out.ar(0,LeakDC.ar(out1),gain);Out.ar(0,LeakDC.ar(out2),gain);
-
 			}
 }).add;);
 
-	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,16256,\high,0,\mix,0,\room,0]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,28,\low,16256/16,\high,0.3,\mix,0.6,\room,0.3]).register;//s.record
 
 	(
 MIDIClient.init;

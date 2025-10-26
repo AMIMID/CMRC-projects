@@ -1,10 +1,19 @@
+////notes
 ///perfect numbers  6, 28, 496, 8128
- (
+ /*(
  var copper=0,bank=5;
- bank.do{ 	copper=(copper+(360/bank)).wrap(0,360).round(0.00000001);
+ bank.do{ 	copper=(copper+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
 	//exp(Complex(0,1)*copper.degrad).real.wrap(0,1).round(0.00000001).postln;
-		(Complex(0,1)*copper.degrad).imag.wrap(0,1).round(0.00000001).postln;
+		(Complex(0,1)*copper.degrad).imag.round(0.00000001).postln;
  } )
+
+(
+ var copper=0,bank=5,angle;
+ bank.do{ 	copper=(copper+(360-(360/1.6180339887499))).wrap(0, 360).round(0.00000001);
+	if(copper>180,{copper=180-copper},{copper=copper});
+	copper=copper.wrap(90.neg,90);
+	copper.postln;
+ } )*/
 //2.pow((992*4)/992)
 //2.pow((56*4)/56)
 //2.pow(6/12)=2.sqrt
@@ -33,14 +42,18 @@ funda=note*2.pow(tone/56).round(0.00000001);
 	m=n*interval;
 	m.postln;
 
-	ph=silver.degrad;
+	ph=golden.degrad;
 
 	linex=exp(Complex(0,1)*copper.degrad).real..round(0.00000001);
 	liney=exp(Complex(0,1)*copper.degrad).imag.neg.round(0.00000001);
 
 		copper=(copper+(360/bank)).round(0.00000001);
 		golden=(golden+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-		silver=(golden+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
+				if(golden>180,{golden=180-golden},{golden=golden});
+		silver=(silver+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
+				if(silver>180,{silver=180-silver},{silver=silver});
+
+
 	freqa=funda*m;
 	freqb=fundb*m;
 	fm1=LFNoise1.ar(freqa.reciprocal,freqa);
