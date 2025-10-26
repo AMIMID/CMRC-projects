@@ -42,7 +42,10 @@ funda=note*2.pow(tone/56).round(0.00000001);
 	m=n*interval;
 	m.postln;
 
-	ph=goldenR.degrad;
+	//ph=goldenR.degrad;
+
+	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
+	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
 		copperR=(copperR+(360/bank)).round(0.00000001);
 		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
@@ -53,10 +56,12 @@ funda=note*2.pow(tone/56).round(0.00000001);
 	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
 	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
 
+	ph=goldenR.degrad;
+
 	freqa=funda*m;
 	freqb=fundb*m;
-	fm1=LFNoise1.ar(freqa.reciprocal,freqa);
-	fm2=LFNoise1.ar(freqb.reciprocal,freqb);
+	fm1=LFDNoise3.ar(freqa.reciprocal,freqa);
+	fm2=LFDNoise3.ar(freqb.reciprocal,freqb);
 
 					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqa,ph,m.reciprocal));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqb,ph,m.reciprocal));
@@ -75,7 +80,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256/16,\high,1,\mix,0.2,\room,0.2]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,16256/8,\high,0.5,\mix,0.1,\room,0.5]).register;//s.record
 
 	(
 MIDIClient.init;

@@ -44,8 +44,8 @@ fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
 
 	freqa=funda*m;
 	freqb=fundb*m;
-	fm1=LFNoise1.ar(freqa.reciprocal,freqa);
-	fm2=LFNoise1.ar(freqb.reciprocal,freqb);
+	fm1=LFDNoise3.ar(freqa.reciprocal,freqa);
+	fm2=LFDNoise3.ar(freqb.reciprocal,freqb);
 
 					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqa,ph,m.reciprocal));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqb,ph,m.reciprocal));
