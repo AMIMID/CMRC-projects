@@ -19,7 +19,7 @@ SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=3/2;
-	var golden=0,silver=0,sig1,sig2,note=28,bank=5,sig,copper=0,out1,out2,fm1,fm2;
+	var goldenR=0,silverR=0,sig1,sig2,note=28,bank=5,sig,copperR=0,out1,out2,fm1,fm2;
 
 
 bank.do{
@@ -31,16 +31,16 @@ fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
 	m=n*(1+2.sqrt);
 	m.postln;
 
-	ph=golden.degrad;
+	ph=goldenR.degrad;
 
-	linex=exp(Complex(0,1)*copper.degrad).real.round(0.00000001);
-	liney=exp(Complex(0,1)*copper.degrad).imag.neg.round(0.00000001);
+	linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
+	liney=exp(Complex(0,1)*copperR.degrad).imag.neg.round(0.00000001);
 
-			copper=(copper+(360/bank)).round(0.00000001);
-		golden=(golden+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-				if(golden>180,{golden=180-golden},{golden=golden});
-		silver=(silver+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
-				if(silver>180,{silver=180-silver},{silver=silver});
+			copperR=(copperR+(360/bank)).round(0.00000001);
+		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
+				if(goldenR>180,{goldenR=180-goldenR},{goldenR=goldenR});
+		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
+				if(silverR>180,{silverR=180-silverR},{silverR=silverR});
 
 	freqa=funda*m;
 	freqb=fundb*m;
@@ -55,8 +55,8 @@ fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
 
-					out1=VBAP.ar(4,LPF.ar(sig1,low),~b.bufnum,silver,silver.wrap(90.neg,90));
-					out2=VBAP.ar(4,LPF.ar(sig2,low),~b.bufnum,silver,silver.wrap(90.neg,90));
+					out1=VBAP.ar(4,LPF.ar(sig1,low),~b.bufnum,silverR,silverR.wrap(90.neg,90));
+					out2=VBAP.ar(4,LPF.ar(sig2,low),~b.bufnum,silverR,silverR.wrap(90.neg,90));
 
 					Out.ar(0,LeakDC.ar(out1),gain);Out.ar(0,LeakDC.ar(out2),gain);
 			}

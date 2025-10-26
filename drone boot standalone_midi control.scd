@@ -1,18 +1,18 @@
 ////notes
 ///perfect numbers  6, 28, 496, 8128
  /*(
- var copper=0,bank=5;
- bank.do{ 	copper=(copper+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-	//exp(Complex(0,1)*copper.degrad).real.wrap(0,1).round(0.00000001).postln;
-		(Complex(0,1)*copper.degrad).imag.round(0.00000001).postln;
+ var copperR=0,bank=5;
+ bank.do{ 	copperR=(copperR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
+	//exp(Complex(0,1)*copperR.degrad).real.wrap(0,1).round(0.00000001).postln;
+		(Complex(0,1)*copperR.degrad).imag.round(0.00000001).postln;
  } )
 
 (
- var copper=0,bank=5,angle;
- bank.do{ 	copper=(copper+(360-(360/1.6180339887499))).wrap(0, 360).round(0.00000001);
-	if(copper>180,{copper=180-copper},{copper=copper});
-	copper=copper.wrap(90.neg,90);
-	copper.postln;
+ var copperR=0,bank=5,angle;
+ bank.do{ 	copperR=(copperR+(360-(360/1.6180339887499))).wrap(0, 360).round(0.00000001);
+	if(copperR>180,{copperR=180-copperR},{copperR=copperR});
+	copperR=copperR.wrap(90.neg,90);
+	copperR.postln;
  } )*/
 //2.pow((992*4)/992)
 //2.pow((56*4)/56)
@@ -20,7 +20,7 @@
 //(56*4)*(496/28)
 //am max freq
 28*16*pi*1.5*3
-///interval for sawtooth is either transcedebtal bumber like golden or silver rario or pi,or a lamdoma table interval
+///interval for sawtooth is either transcedebtal bumber like goldenR or silverR rario or pi,or a lamdoma table interval
 (
 Server.default = s = Server.local;
 ////server setup
@@ -31,7 +31,7 @@ SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 			var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12);
-	var golden=0,silver=0,sig1,sig2,note=28,bank=5,sig,copper=0,out1,out2,fm1,fm2;
+	var goldenR=0,silverR=0,sig1,sig2,note=28,bank=5,sig,copperR=0,out1,out2,fm1,fm2;
 
 bank.do{
 
@@ -42,17 +42,16 @@ funda=note*2.pow(tone/56).round(0.00000001);
 	m=n*interval;
 	m.postln;
 
-	ph=golden.degrad;
+	ph=goldenR.degrad;
 
-	linex=exp(Complex(0,1)*copper.degrad).real..round(0.00000001);
-	liney=exp(Complex(0,1)*copper.degrad).imag.neg.round(0.00000001);
+		copperR=(copperR+(360/bank)).round(0.00000001);
+		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
+				if(goldenR>180,{goldenR=180-goldenR},{goldenR=goldenR});
+		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
+				if(silverR>180,{silverR=180-silverR},{silverR=silverR});
 
-		copper=(copper+(360/bank)).round(0.00000001);
-		golden=(golden+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-				if(golden>180,{golden=180-golden},{golden=golden});
-		silver=(silver+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
-				if(silver>180,{silver=180-silver},{silver=silver});
-
+	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
+	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
 
 	freqa=funda*m;
 	freqb=fundb*m;
@@ -76,7 +75,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256,\high,0,\mix,0.5,\room,0.2]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256/16,\high,1,\mix,0.2,\room,0.2]).register;//s.record
 
 	(
 MIDIClient.init;
