@@ -38,9 +38,8 @@ SynthDef.new(\drone,{
 bank.do{
 
 n1=2.pow(tone/56).round(0.00000001);
-//n2=2.pow((tone*(496/28))/992).round(0.00000001);
 //n2=2.pow((tone*(1/1))/992).round(0.00000001);
-n2=2.pow((tone*(28/6))/992).round(0.00000001);
+n2=2.pow((tone*10)/992).round(0.00000001);
 
 funda=note*n1;
 fundb=note*n2;
