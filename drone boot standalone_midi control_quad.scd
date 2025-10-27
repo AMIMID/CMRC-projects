@@ -60,8 +60,8 @@ fundb=note*n2;
 	amp1=m.reciprocal*n1.reciprocal;
 	amp2=m.reciprocal*n2.reciprocal;
 
-	fm1=LFNoise1.ar(amp1.reciprocal,amp1);
-	fm2=LFNoise1.ar(amp2.reciprocal,amp2);
+	fm1=LFNoise1.ar(amp1.reciprocal*(room+0.01),amp1/(room+0.01));
+	fm2=LFNoise1.ar(amp2.reciprocal*(room+0.01),amp2/(room+0.01));
 
 				//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
