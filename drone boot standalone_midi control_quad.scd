@@ -60,8 +60,8 @@ fundb=note*n2;
 	amp1=m.reciprocal*n1.reciprocal;
 	amp2=m.reciprocal*n2.reciprocal;
 
-	fm1=LFDNoise1.ar(amp1.reciprocal,amp1);
-	fm2=LFDNoise1.ar(amp2.reciprocal,amp2);
+	fm1=LFNoise1.ar(amp1.reciprocal,amp1);
+	fm2=LFNoise1.ar(amp2.reciprocal,amp2);
 
 				//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
@@ -78,7 +78,7 @@ sig2=FreeVerb.ar(sig2,mix,room,high);
 			}
 }).add;);
 
-	~synth=Synth.new(\drone,[\gain,1,\tone,28,\low,16256/16,\high,0.3,\mix,0.6,\room,0.3]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256,\high,0,\mix,0,\room,0]).register;//s.record
 
 	(
 MIDIClient.init;

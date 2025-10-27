@@ -19,10 +19,10 @@
 //2.pow(6/12)=2.sqrt
 //(56*4)*(496/28)
 //am max freq
-////28*16*pi*1.5*3
+//28*2.pow(6/12)*(7*2.pow(6/12))*2.pow(112/56).round(0.00000001)*7
 ///interval for sawtooth is either transcedebtal bumber like goldenR or silverR rario or pi,or a lamdoma table interval
 
-
+56*2
 (
 Server.default = s = Server.local;
 ////server setup
@@ -34,7 +34,7 @@ SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12),n1,n2,amp1,amp2;
-	var goldenR=0,silverR=0,sig1,sig2,note=28*2.pow(6/12),bank=5,sig,copperR=0,out1,out2,fm1,fm2;
+	var goldenR=0,silverR=0,sig1,sig2,note=28*2.pow(6/12),bank=7,sig,copperR=0,out1,out2,fm1,fm2;
 
 bank.do{
 
@@ -71,13 +71,13 @@ fundb=note*n2;
 	amp1=m.reciprocal*n1.reciprocal;
 	amp2=m.reciprocal*n2.reciprocal;
 
-	fm1=LFDNoise1.ar(amp1.reciprocal,amp1);
-	fm2=LFDNoise1.ar(amp2.reciprocal,amp2);
+	fm1=LFNoise1.ar(amp1.reciprocal,amp1);
+	fm2=LFNoise1.ar(amp2.reciprocal,amp2);
 
 					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
-					sig1=(LPF.ar(Pulse.ar((freqa*3)+fm1,width:0.5,mul:amp1).abs,low/2)*SinOsc.ar(freqa+fm1,ph,amp1));
-					sig2=(LPF.ar(Pulse.ar((freqb*3)+fm2,width:0.5,mul:amp2).abs,low/2)*SinOsc.ar(freqb+fm2,ph,amp2));
+					sig1=(LPF.ar(Pulse.ar((freqa*7)+fm1,width:0.5,mul:amp1).abs,low/2)*SinOsc.ar(freqa+fm1,ph,amp1));
+					sig2=(LPF.ar(Pulse.ar((freqb*7)+fm2,width:0.5,mul:amp2).abs,low/2)*SinOsc.ar(freqb+fm2,ph,amp2));
 
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
@@ -91,7 +91,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,33,\low,16256/4,\high,0.1,\mix,0.1,\room,1]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256/5,\high,0,\mix,0,\room,0]).register;//s.record
 
 	(
 MIDIClient.init;
