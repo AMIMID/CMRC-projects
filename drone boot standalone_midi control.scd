@@ -53,10 +53,10 @@ fundb=note*n2;
 	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
 	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
-		copperR=(copperR+(360/bank)).round(0.00000001);
-		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(180.neg,180).round(0.00000001);
+	copperR=(copperR+(360/bank)).round(0.00000001);
+		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
 				if(goldenR>0,{golden=180-goldenR},{golden=goldenR});
-		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
+		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
 				if(silverR>0,{silver=180-silver},{silver=silverR});
 
 	linex=exp(Complex(0,1)*silver.degrad).real.round(0.00000001);
