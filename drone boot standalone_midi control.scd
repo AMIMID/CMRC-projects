@@ -26,14 +26,17 @@
 Server.default = s = Server.local;
 ////server setup
 s.options.memSize = 8192*8;
+s.options.numInputBusChannels=0;
 (
 s.waitForBoot{
+	Tdef(\cmrc, {
 	(
 SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12),n1,n2,amp1,amp2;
-	var goldenR=0,silverR=0,sig1,sig2,note=28*2.pow(6/12),bank=7,sig,copperR=0,out1,out2,fm1,fm2;
+	var goldenR=45,silverR=45,sig1,sig2,note=28*2.pow(6/12),bank=7,sig,copperR=45,out1,out2,fm1,fm2;
+
 
 bank.do{
 
@@ -46,20 +49,14 @@ fundb=note*n2;
 
 	n=n+1;
 	m=n*interval;
-	m.postln;
-goldenR.postln;
-	//ph=goldenR.degrad;
-	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
-	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
-		copperR=(copperR+(360/bank)).round(0.00000001);
-		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(180.neg,180).round(0.00000001);
+							ph=goldenR.degrad;
+linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001).abs;
+liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001).abs.neg;
+
+	copperR=(copperR+(360/bank)).round(0.00000001);
+		goldenR=(goldenR+(360-(360/((1+5.sqrt)/2)))).wrap(180.neg,180).round(0.00000001);
 		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
-
-	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
-	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
-
-	ph=goldenR.degrad;
 
 	freqa=funda*m;
 	freqb=fundb*m;
@@ -72,23 +69,28 @@ goldenR.postln;
 
 					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
-					sig1=(LPF.ar(Pulse.ar((freqa*16).poll+fm1,width:0.5,mul:amp1).abs,low/2)*SinOsc.ar(freqa+fm1,ph,amp1));
-					sig2=(LPF.ar(Pulse.ar((freqb*16)+fm2,width:0.5,mul:amp2).abs,low/2)*SinOsc.ar(freqb+fm2,ph,amp2));
+					sig1=(LPF.ar(Pulse.ar((freqa*8)+fm1,width:0.5,mul:amp1).abs,low/8)*SinOsc.ar(freqa+fm1,ph,amp1));
+					sig2=(LPF.ar(Pulse.ar((freqb*8)+fm2,width:0.5,mul:amp2).abs,low/8)*SinOsc.ar(freqb+fm2,ph,amp2));
 
-sig1=LPF.ar(sig1,low,1);
-sig2=LPF.ar(sig2,low,1);
+sig1=LPF.ar(HPF.ar(sig1,high),low,1);
+sig2=LPF.ar(HPF.ar(sig2,high),low,1);
 
-out1=FreeVerb.ar(sig1,mix,room,high);
-out2=FreeVerb.ar(sig2,mix,room,high);
+
+out1=FreeVerb.ar(sig1,mix,room);
+out2=FreeVerb.ar(sig2,mix,room);
 
 					//sig=sig1+sig2;
 
+//	Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));
 Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,16256,\high,0,\mix,0,\room,0]).register;//s.record
+			1.wait;
+	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256,\high,56,\mix,0.2,\room,1]).register;//s.record
+
+		1.wait;
 
 	(
 MIDIClient.init;
@@ -97,7 +99,7 @@ MIDIIn.connectAll;
 MIDIdef.cc(\midi1,{ |val, num, chan, src|
 		var l;
 	//[val, num, chan, src].postln;
-		l=val.linlin(0,127,16256,56).round(0.00000001);
+		l=val.linlin(0,127,8128,56).round(0.00000001);
 		l.postln;
 		if(~synth.isPlaying,{~synth.set(\low,l)});
 },25);
@@ -106,7 +108,7 @@ MIDIdef.cc(\midi1,{ |val, num, chan, src|
 MIDIdef.cc(\midi2,{ |val, num, chan, src|
 		 var h;
 	//[val, num, chan, src].postln;
-	h=val.linlin(0,127,1,0).round(0.00000001);
+	h=val.linlin(0,127,56,8128).round(0.00000001);
 		h.postln;
 		if(~synth.isPlaying,{~synth.set(\high,h)});
 },24);
@@ -150,7 +152,7 @@ MIDIdef.cc(\midi6,{ |val, num, chan, src|
 	);
 
 )
-
-
+});
+	Tdef(\cmrc).play;
 }
 ))
