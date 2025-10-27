@@ -35,7 +35,7 @@ SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12),n1,n2,amp1,amp2;
-	var goldenR=45,silverR=45,sig1,sig2,note=28*2.pow(6/12),bank=7,sig,copperR=45,out1,out2,fm1,fm2;
+	var goldenR=45,silverR=45,sig1,sig2,note=28*2.pow(6/12),bank=9,sig,copperR=0,out1,out2,fm1,fm2;
 
 
 bank.do{
