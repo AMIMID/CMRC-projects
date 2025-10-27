@@ -20,7 +20,7 @@
 //(56*4)*(496/28)
 //am max freq
 //28*2.pow(6/12)*(7*2.pow(6/12))*2.pow(112/56).round(0.00000001)*10
-//2.pow((56*(1/1))/56).round(0.00000001);
+//2.pow((56*(28/6))/992).round(0.00000001);
 ///interval for sawtooth is either transcedebtal bumber like goldenR or silverR rario or pi,or a lamdoma table interval
 
 (
@@ -40,7 +40,8 @@ bank.do{
 
 n1=2.pow(tone/56).round(0.00000001);
 //n2=2.pow((tone*(496/28))/992).round(0.00000001);
-n2=2.pow((tone)/992).round(0.00000001);
+n2=2.pow((tone*(1/1))/992).round(0.00000001);
+//n2=2.pow((tone*(28/6))/992).round(0.00000001);
 
 funda=note*n1;
 fundb=note*n2;
@@ -83,8 +84,8 @@ fundb=note*n2;
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
 
-out1=LPF.ar(sig1,low);
-out2=LPF.ar(sig2,low);
+out1=LPF.ar(sig1,low,1);
+out2=LPF.ar(sig2,low,1);
 					//sig=sig1+sig2;
 
 Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));

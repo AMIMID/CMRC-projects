@@ -20,7 +20,7 @@ SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
 	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=3/2,n1,n2,amp1,amp2;
-	var goldenR=0,silverR=0,sig1,sig2,note=28,bank=5,sig,copperR=0,out1,out2,fm1,fm2;
+	var goldenR=0,silverR=0,sig1,sig2,note=28,bank=10,sig,copperR=0,out1,out2,fm1,fm2;
 
 
 bank.do{
@@ -28,7 +28,8 @@ bank.do{
 
 n1=2.pow(tone/56).round(0.00000001);
 //n2=2.pow((tone*(496/28))/992).round(0.00000001);
-n2=2.pow((tone)/992).round(0.00000001);
+n2=2.pow((tone*(1/1))/992).round(0.00000001);
+//n2=2.pow((tone*(28/6))/992).round(0.00000001);
 
 funda=note*n1;
 fundb=note*n2;
@@ -66,14 +67,14 @@ fundb=note*n2;
 
 				//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
-					sig1=(LPF.ar(Pulse.ar((freqa*3)+fm1,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa+fm1,ph,amp1));
-					sig2=(LPF.ar(Pulse.ar((freqb*3)+fm2,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb+fm2,ph,amp2));
+					sig1=(LPF.ar(Pulse.ar((freqa*7)+fm1,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa+fm1,ph,amp1));
+					sig2=(LPF.ar(Pulse.ar((freqb*7)+fm2,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb+fm2,ph,amp2));
 
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
 
-					out1=VBAP.ar(4,LPF.ar(sig1,low,0.5);,~b.bufnum,silverR,silverR.wrap(90.neg,90));
-					out2=VBAP.ar(4,LPF.ar(sig2,low,0.5);,~b.bufnum,silverR,silverR.wrap(90.neg,90));
+					out1=VBAP.ar(4,LPF.ar(sig1,low,1);,~b.bufnum,silverR,silverR.wrap(90.neg,90));
+					out2=VBAP.ar(4,LPF.ar(sig2,low,1);,~b.bufnum,silverR,silverR.wrap(90.neg,90));
 
 					Out.ar(0,LeakDC.ar(out1),gain);Out.ar(0,LeakDC.ar(out2),gain);
 			}
@@ -134,7 +135,7 @@ MIDIdef.cc(\midi5,{ |val, num, chan, src|
 MIDIdef.cc(\midi6,{ |val, num, chan, src|
 		var t;
 	//[val, num, chan, src].postln;
-		t=val.linlin(0,127,0,224).round(1).asInteger;
+		t=val.linlin(0,127,0,112).round(1).asInteger;
 		t.postln;
 		if(~synth.isPlaying,{~synth.set(\tone,t)});
 },20);
