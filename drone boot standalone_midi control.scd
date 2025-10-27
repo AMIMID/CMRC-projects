@@ -37,8 +37,9 @@ SynthDef.new(\drone,{
 
 bank.do{
 
-				n1=2.pow(tone/56).round(0.00000001);
-				n2=2.pow((tone*(496/28))/992).round(0.00000001);
+n1=2.pow(tone/56).round(0.00000001);
+n2=2.pow((tone*(496/28))/992).round(0.00000001);
+
 funda=note*n1;
 fundb=note*n2;
 
@@ -46,28 +47,31 @@ fundb=note*n2;
 	m=n*interval;
 	m.postln;
 
-	//ph=goldenR.degrad;
-
+	ph=goldenR.degrad;
 	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
 	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
 		copperR=(copperR+(360/bank)).round(0.00000001);
+
 		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
 				if(goldenR>180,{goldenR=180-goldenR},{goldenR=goldenR});
+
 		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
 				if(silverR>180,{silverR=180-silverR},{silverR=silverR});
 
 	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
 	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
 
-	ph=goldenR.degrad;
+	//ph=goldenR.degrad;
 
 	freqa=funda*m;
 	freqb=fundb*m;
-	fm1=LFDNoise3.ar(freqa.reciprocal,freqa);
-	fm2=LFDNoise3.ar(freqb.reciprocal,freqb);
+
 	amp1=m.reciprocal*n1.reciprocal;
 	amp2=m.reciprocal*n2.reciprocal;
+
+	fm1=LFDNoise3.ar(freqa.reciprocal,amp1);
+	fm2=LFDNoise3.ar(freqb.reciprocal,amp2);
 
 					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
@@ -86,7 +90,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256/8,\high,0.5,\mix,1,\room,1]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,6,\low,16256/4,\high,0.1,\mix,0.5,\room,0.55]).register;//s.record
 
 	(
 MIDIClient.init;
