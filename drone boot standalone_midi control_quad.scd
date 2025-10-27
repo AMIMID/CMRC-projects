@@ -44,7 +44,7 @@ fundb=note*n2;
 	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
 		copperR=(copperR+(360/bank)).round(0.00000001);
-		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(180.neg,180).round(0.00000001);
+		goldenR=(goldenR+(360-(360/((1+5.sqrt)/2)))).wrap(180.neg,180).round(0.00000001);
 		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
 
 

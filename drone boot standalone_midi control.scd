@@ -55,7 +55,7 @@ fundb=note*n2;
 
 
 	copperR=(copperR+(360/bank)).round(0.00000001);
-		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(180.neg,180).round(0.00000001);
+		goldenR=(goldenR+(360-(360/((1+5.sqrt)/2)))).wrap(180.neg,180).round(0.00000001);
 		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
 
 ph=goldenR.degrad;
@@ -84,8 +84,9 @@ out2=FreeVerb.ar(sig2,mix,room,high);
 
 					//sig=sig1+sig2;
 
-Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));
-Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
+	Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
+//Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));
+//Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
