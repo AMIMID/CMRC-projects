@@ -33,8 +33,8 @@ s.waitForBoot{
 SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
-	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12),n1,n2,amp1,amp2,golden,silver;
-	var goldenR=0,silverR=0,sig1,sig2,note=28*2.pow(6/12),bank=70,sig,copperR=0,out1,out2,fm1,fm2;
+	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12),n1,n2,amp1,amp2;
+	var goldenR=0,silverR=0,sig1,sig2,note=28*2.pow(6/12),bank=7,sig,copperR=0,out1,out2,fm1,fm2;
 
 
 bank.do{
@@ -48,21 +48,19 @@ fundb=note*n2;
 
 	n=n+1;
 	m=n*interval;
-	m.postln;
-	//ph=goldenR.degrad;
-	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
-	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
+
+	linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
+	liney=exp(Complex(0,1)*copperR.degrad).imag.neg.round(0.00000001);
+	ph=goldenR.degrad;
+
 
 	copperR=(copperR+(360/bank)).round(0.00000001);
-		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-				if(goldenR>0,{golden=180-goldenR},{golden=goldenR});
-		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
-				if(silverR>0,{silver=180-silver},{silver=silverR});
+		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(180.neg,180).round(0.00000001);
+		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
 
-	linex=exp(Complex(0,1)*silver.degrad).real.round(0.00000001);
-	liney=exp(Complex(0,1)*silver.degrad).imag.round(0.00000001);
-
-	ph=golden.degrad;
+//ph=goldenR.degrad;
+	//linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
+	//liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
 
 	freqa=funda*m;
 	freqb=fundb*m;
@@ -75,7 +73,7 @@ fundb=note*n2;
 
 					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
-					sig1=(LPF.ar(Pulse.ar((freqa*16).poll+fm1,width:0.5,mul:amp1).abs,low/2)*SinOsc.ar(freqa+fm1,ph,amp1));
+					sig1=(LPF.ar(Pulse.ar((freqa*16)+fm1,width:0.5,mul:amp1).abs,low/2)*SinOsc.ar(freqa+fm1,ph,amp1));
 					sig2=(LPF.ar(Pulse.ar((freqb*16)+fm2,width:0.5,mul:amp2).abs,low/2)*SinOsc.ar(freqb+fm2,ph,amp2));
 
 sig1=LPF.ar(sig1,low,1);
@@ -91,7 +89,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,16256,\high,0,\mix,0,\room,0]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,12,\low,16256/8,\high,0.2,\mix,0.2,\room,0.3]).register;//s.record
 
 	(
 MIDIClient.init;
