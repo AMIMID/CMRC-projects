@@ -78,11 +78,11 @@ fundb=note*n2;
 					sig1=(LPF.ar(Pulse.ar((freqa*3)+fm1,width:0.5,mul:amp1).abs,low/2)*SinOsc.ar(freqa+fm1,ph,amp1));
 					sig2=(LPF.ar(Pulse.ar((freqb*3)+fm2,width:0.5,mul:amp2).abs,low/2)*SinOsc.ar(freqb+fm2,ph,amp2));
 
-sig1=FreeVerb.ar(sig1,mix,room,high,);
-sig2=FreeVerb.ar(sig2,mix,room,high,n2.reciprocal);
+sig1=FreeVerb.ar(sig1,mix,room,high);
+sig2=FreeVerb.ar(sig2,mix,room,high);
 
-out1=LPF.ar(sig1,low,0.5);
-out2=LPF.ar(sig2,low,0.5);
+out1=LPF.ar(sig1,low);
+out2=LPF.ar(sig2,low);
 					//sig=sig1+sig2;
 
 Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));
@@ -90,7 +90,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256/6,\high,0.1,\mix,1,\room,0.55]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,33,\low,16256/4,\high,0.1,\mix,0.1,\room,1]).register;//s.record
 
 	(
 MIDIClient.init;
