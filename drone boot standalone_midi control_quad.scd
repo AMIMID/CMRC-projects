@@ -5,6 +5,7 @@
 Server.default = s = Server.local;
 ////server setup
 s.options.numOutputBusChannels=4;
+s.options.numInputBusChannels=0;
 s.options.memSize = 8192*8
 
 (
@@ -19,7 +20,7 @@ s.waitForBoot{
 SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
-	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=3/2,n1,n2,amp1,amp2;
+	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=3/2,n1,n2,amp1,amp2,golden,silver;
 	var goldenR=0,silverR=0,sig1,sig2,note=28,bank=7,sig,copperR=0,out1,out2,fm1,fm2;
 
 
@@ -42,18 +43,17 @@ fundb=note*n2;
 	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
 	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
-			copperR=(copperR+(360/bank)).round(0.00000001);
+		copperR=(copperR+(360/bank)).round(0.00000001);
+		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(180.neg,180).round(0.00000001);
+				if(goldenR>0,{golden=180-goldenR},{golden=goldenR});
+		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
+				if(silverR>0,{silver=180-silver},{silver=silverR});
 
-		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
-				if(goldenR>180,{goldenR=180-goldenR},{goldenR=goldenR});
+	linex=exp(Complex(0,1)*silver.degrad).real.round(0.00000001);
+	liney=exp(Complex(0,1)*silver.degrad).imag.round(0.00000001);
 
-		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
-				if(silverR>180,{silverR=180-silverR},{silverR=silverR});
+	ph=golden.degrad;
 
-	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
-	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
-
-	ph=goldenR.degrad;
 
 	freqa=funda*m;
 	freqb=fundb*m;
