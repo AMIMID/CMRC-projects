@@ -19,8 +19,10 @@
 //2.pow(6/12)=2.sqrt
 //(56*4)*(496/28)
 //am max freq
-28*16*pi*1.5*3
+////28*16*pi*1.5*3
 ///interval for sawtooth is either transcedebtal bumber like goldenR or silverR rario or pi,or a lamdoma table interval
+
+
 (
 Server.default = s = Server.local;
 ////server setup
@@ -30,13 +32,15 @@ s.waitForBoot{
 SynthDef.new(\drone,{
 
 	arg gain=1,low=7168,high=0,tone=0,mix=0,room=0;
-			var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12);
+	var freqa,freqb,funda,fundb,n=0,m,ph,linex,liney,interval=2.pow(6/12),n1,n2,amp1,amp2;
 	var goldenR=0,silverR=0,sig1,sig2,note=28,bank=5,sig,copperR=0,out1,out2,fm1,fm2;
 
 bank.do{
 
-funda=note*2.pow(tone/56).round(0.00000001);
-	fundb=note*2.pow((tone*(496/28))/992).round(0.00000001);
+				n1=2.pow(tone/56).round(0.00000001);
+				n2=2.pow((tone*(496/28))/992).round(0.00000001);
+funda=note*n1;
+fundb=note*n2;
 
 	n=n+1;
 	m=n*interval;
@@ -62,17 +66,19 @@ funda=note*2.pow(tone/56).round(0.00000001);
 	freqb=fundb*m;
 	fm1=LFDNoise3.ar(freqa.reciprocal,freqa);
 	fm2=LFDNoise3.ar(freqb.reciprocal,freqb);
+	amp1=m.reciprocal*n1.reciprocal;
+	amp2=m.reciprocal*n2.reciprocal;
 
-					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqa,ph,m.reciprocal));
-					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqb,ph,m.reciprocal));
-					sig1=(LPF.ar(Pulse.ar((freqa*3)+fm1,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqa+fm1,ph,m.reciprocal));
-					sig2=(LPF.ar(Pulse.ar((freqb*3)+fm2,width:0.5,mul:m.reciprocal).abs,low/4)*SinOsc.ar(freqb+fm2,ph,m.reciprocal));
+					//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
+					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
+					sig1=(LPF.ar(Pulse.ar((freqa*3)+fm1,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa+fm1,ph,amp1));
+					sig2=(LPF.ar(Pulse.ar((freqb*3)+fm2,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb+fm2,ph,amp2));
 
-sig1=FreeVerb.ar(sig1,mix,room,high);
-sig2=FreeVerb.ar(sig2,mix,room,high);
+sig1=FreeVerb.ar(sig1,mix,room,high,);
+sig2=FreeVerb.ar(sig2,mix,room,high,n2.reciprocal);
 
-out1=LPF.ar(sig1,low);
-out2=LPF.ar(sig2,low);
+out1=LPF.ar(sig1,low,0.5);
+out2=LPF.ar(sig2,low,0.5);
 					//sig=sig1+sig2;
 
 Out.ar(0,Pan2.ar(out1,linex,gain));Out.ar(0,Pan2.ar(out1,liney,gain));
@@ -80,7 +86,7 @@ Out.ar(0,Pan2.ar(out2,linex,gain));Out.ar(0,Pan2.ar(out2,liney,gain));
 //Out.ar(0,Pan2.ar(sig,linex,gain));Out.ar(0,Pan2.ar(sig,liney,gain));
 			}
 }).add;);
-	~synth=Synth.new(\drone,[\gain,1,\tone,56,\low,16256/8,\high,0.5,\mix,0.1,\room,0.5]).register;//s.record
+	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256/8,\high,0.5,\mix,1,\room,1]).register;//s.record
 
 	(
 MIDIClient.init;
@@ -142,7 +148,7 @@ MIDIdef.cc(\midi6,{ |val, num, chan, src|
 	);
 
 )
-)
+
 
 }
-)
+))
