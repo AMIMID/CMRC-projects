@@ -37,27 +37,30 @@ fundb=note*n2;
 
 	ph=goldenR.degrad;
 	//ph=goldenR.degrad;
-
 	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
 	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
 
 			copperR=(copperR+(360/bank)).round(0.00000001);
+
 		goldenR=(goldenR+(360-(360/1.6180339887499))).wrap(0,360).round(0.00000001);
 				if(goldenR>180,{goldenR=180-goldenR},{goldenR=goldenR});
+
 		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(0,360).round(0.00000001);
 				if(silverR>180,{silverR=180-silverR},{silverR=silverR});
 
-				linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
+	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
 	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
 
 	ph=goldenR.degrad;
 
 	freqa=funda*m;
 	freqb=fundb*m;
-	fm1=LFDNoise3.ar(freqa.reciprocal,freqa);
-	fm2=LFDNoise3.ar(freqb.reciprocal,freqb);
-		amp1=m.reciprocal*n1.reciprocal;
+
+	amp1=m.reciprocal*n1.reciprocal;
 	amp2=m.reciprocal*n2.reciprocal;
+
+	fm1=LFDNoise1.ar(amp1.reciprocal,amp1);
+	fm2=LFDNoise1.ar(amp2.reciprocal,amp2);
 
 				//sig1=(LPF.ar(Pulse.ar(freqa*3,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa,ph,amp1));
 					//sig2=(LPF.ar(Pulse.ar(freqb*3,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb,ph,amp2));
