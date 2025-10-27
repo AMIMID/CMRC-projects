@@ -5,6 +5,7 @@
 Server.default = s = Server.local;
 ////server setup
 s.options.numOutputBusChannels=4;
+s.options.memSize = 8192*8
 
 (
 s.waitForBoot{
@@ -95,7 +96,7 @@ MIDIdef.cc(\midi1,{ |val, num, chan, src|
 MIDIdef.cc(\midi2,{ |val, num, chan, src|
 		 var h;
 	//[val, num, chan, src].postln;
-	h=val.linlin(0,127,0,1).round(0.00000001);
+	h=val.linlin(0,127,1,0).round(0.00000001);
 		h.postln;
 		if(~synth.isPlaying,{~synth.set(\high,h)});
 },24);
