@@ -10,6 +10,7 @@ s.options.memSize = 8192*8
 
 (
 s.waitForBoot{
+	Tdef(\cmrc, {
 	Buffer.freeAll;
 	(
 	~a = VBAPSpeakerArray.new(3, [[45, 35.264390.neg], [135.neg, 35.264390.neg], [45.neg, 35.264390], [135, 35.264390]]);
@@ -38,21 +39,14 @@ fundb=note*n2;
 	m=n*(1+2.sqrt);
 	m.postln;
 
-	ph=goldenR.degrad;
-	//ph=goldenR.degrad;
-	//linex=exp(Complex(0,1)*copperR.degrad).real.round(0.00000001);
-	//liney=exp(Complex(0,1)*copperR.degrad).imag.round(0.00000001);
-
 		copperR=(copperR+(360/bank)).round(0.00000001);
 		goldenR=(goldenR+(360-(360/((1+5.sqrt)/2)))).wrap(180.neg,180).round(0.00000001);
-		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001);
-
+		silverR=(silverR+(360-(360/(1+2.sqrt)))).wrap(180.neg,180).round(0.00000001)
 
 	linex=exp(Complex(0,1)*silverR.degrad).real.round(0.00000001);
 	liney=exp(Complex(0,1)*silverR.degrad).imag.round(0.00000001);
 
 	ph=goldenR.degrad;
-
 
 	freqa=funda*m;
 	freqb=fundb*m;
@@ -68,17 +62,21 @@ fundb=note*n2;
 					sig1=(LPF.ar(Pulse.ar((freqa*8)+fm1,width:0.5,mul:amp1).abs,low/4)*SinOsc.ar(freqa+fm1,ph,amp1));
 					sig2=(LPF.ar(Pulse.ar((freqb*8)+fm2,width:0.5,mul:amp2).abs,low/4)*SinOsc.ar(freqb+fm2,ph,amp2));
 
+sig1=LPF.ar(HPF.ar(sig1,high),low,1);
+sig2=LPF.ar(HPF.ar(sig2,high),low,1);
+
 sig1=FreeVerb.ar(sig1,mix,room,high);
 sig2=FreeVerb.ar(sig2,mix,room,high);
 
-					out1=VBAP.ar(4,LPF.ar(sig1,low,1);,~b.bufnum,silverR,silverR.wrap(90.neg,90));
-					out2=VBAP.ar(4,LPF.ar(sig2,low,1);,~b.bufnum,silverR,silverR.wrap(90.neg,90));
+					out1=VBAP.ar(4,sig1,~b.bufnum,silverR,silverR.wrap(90.neg,90));
+					out2=VBAP.ar(4,sig2,~b.bufnum,silverR,silverR.wrap(90.neg,90));
 
 					Out.ar(0,LeakDC.ar(out1),gain);Out.ar(0,LeakDC.ar(out2),gain);
 			}
 }).add;);
-
+1.wait;
 	~synth=Synth.new(\drone,[\gain,1,\tone,0,\low,16256,\high,0,\mix,0,\room,0]).register;//s.record
+1.wait;
 
 	(
 MIDIClient.init;
@@ -140,7 +138,8 @@ MIDIdef.cc(\midi6,{ |val, num, chan, src|
 	);
 
 )
-
+});
+	Tdef(\cmrc).play;
 }
 )
 )
